@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 
@@ -102,8 +102,7 @@ interface INavApp {
 export const NavApp: FC<INavApp> = (props) => {
   const styles = useStyles(style, props.scalingKey);
   const [value, setValue] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const location = useLocation();
   const pageId = {
     home: 0,
     analytics: 1,
@@ -113,12 +112,14 @@ export const NavApp: FC<INavApp> = (props) => {
   const aboutRedirectUrl = useSession().appConfig.aboutRedirectUrl;
 
   useEffect(() => {
-    if (loading) {
-      navigate("home/swap");
-      setValue(0);
-      setLoading(false);
+    if (location.pathname.startsWith("/analytics")) {
+      setValue(pageId.analytics);
+      return;
     }
-  }, [loading, navigate]);
+    if (location.pathname.startsWith("/home")) {
+      setValue(pageId.home);
+    }
+  }, [location.pathname]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     event.preventDefault();
@@ -136,7 +137,7 @@ export const NavApp: FC<INavApp> = (props) => {
       }}
     >
       <NavTab label="Home" href="/home/swap" />
-      <NavTab disabled label="Analytics" href="/Analytics" />
+      <NavTab label="Analytics" href="/analytics" />
       <NavTabExternal label="About" href={aboutRedirectUrl} />
     </Tabs>
   );

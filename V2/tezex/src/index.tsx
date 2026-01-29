@@ -6,18 +6,22 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { SessionProvider } from "./contexts/session";
 import ReactDOM from "react-dom/client";
-import { createHashRouter, RouterProvider } from "react-router-dom";
-import "./index.css";
+import { createHashRouter, RouterProvider, Navigate } from "react-router-dom";
 
 import { AppConfig } from "./types/general";
 import appConfig from "./config/app.json";
 import { Home } from "./pages/Home";
+import { Analytics } from "./pages/Analytics";
 
 const router = createHashRouter([
   {
     path: "/",
     element: <App />,
     children: [
+      {
+        index: true,
+        element: <Navigate to="home/swap" replace />,
+      },
       {
         path: "home/swap",
         element: <Home path="swap" />,
@@ -32,7 +36,7 @@ const router = createHashRouter([
       },
       {
         path: "analytics",
-        element: <Home path="swap" />,
+        element: <Analytics />,
       },
     ],
   },

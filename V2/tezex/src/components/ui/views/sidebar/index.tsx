@@ -171,7 +171,7 @@ export const SideBar: FC<ISideBarProps> = (props) => {
             </Collapse>
 
             <ListItem disablePadding sx={styles.listItem}>
-              <ListItemButton disabled component={Link} to="/Analytics">
+              <ListItemButton component={Link} to="/analytics">
                 <ListItemText primary="Analytics" sx={styles.listItemText} />
               </ListItemButton>
             </ListItem>
