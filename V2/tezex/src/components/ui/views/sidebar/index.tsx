@@ -15,7 +15,7 @@ import KeyboardDoubleArrowRightSharp from "@mui/icons-material/KeyboardDoubleArr
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { useSession } from "../../../../hooks/session";
-import { TransactingComponent } from "../../../../types/general";
+import { Pages, TransactingComponent } from "../../../../types/general";
 import style from "./style";
 import useStyles from "../../../../hooks/styles";
 import { useMobileOrientation } from "react-device-detect";
@@ -119,7 +119,7 @@ export const SideBar: FC<ISideBarProps> = (props) => {
                 <ListItem disablePadding sx={styles.listItem}>
                   <ListItemButton
                     component={Link}
-                    to="/home/swap"
+                    to={Pages.SWAP}
                     selected={active === 0}
                     sx={styles.swapButton}
                   >
@@ -147,7 +147,7 @@ export const SideBar: FC<ISideBarProps> = (props) => {
                     <ListItem disablePadding sx={styles.listItem}>
                       <ListItemButton
                         component={Link}
-                        to="/home/add"
+                        to={Pages.ADD_LIQUIDITY}
                         selected={active === 1}
                         sx={styles.nestedButton}
                       >
@@ -158,7 +158,7 @@ export const SideBar: FC<ISideBarProps> = (props) => {
                     <ListItem disablePadding sx={styles.listItem}>
                       <ListItemButton
                         component={Link}
-                        to="/home/remove"
+                        to={Pages.REMOVE_LIQUIDITY}
                         selected={active === 2}
                         sx={styles.nestedButton}
                       >
@@ -171,7 +171,7 @@ export const SideBar: FC<ISideBarProps> = (props) => {
             </Collapse>
 
             <ListItem disablePadding sx={styles.listItem}>
-              <ListItemButton component={Link} to="/analytics">
+              <ListItemButton component={Link} to={Pages.ANALYTICS}>
                 <ListItemText primary="Analytics" sx={styles.listItemText} />
               </ListItemButton>
             </ListItem>

@@ -7,6 +7,7 @@ import style from "./style";
 import useStyles from "../../hooks/styles";
 
 import { useSession } from "../../hooks/session";
+import { Pages } from "../../types/general";
 import Box from "@mui/material/Box";
 
 interface NavTabProps {
@@ -112,7 +113,7 @@ export const NavApp: FC<INavApp> = (props) => {
   const aboutRedirectUrl = useSession().appConfig.aboutRedirectUrl;
 
   useEffect(() => {
-    if (location.pathname.startsWith("/analytics")) {
+    if (location.pathname.startsWith(Pages.ANALYTICS)) {
       setValue(pageId.analytics);
       return;
     }
@@ -136,8 +137,8 @@ export const NavApp: FC<INavApp> = (props) => {
         style: { display: "none" },
       }}
     >
-      <NavTab label="Home" href="/home/swap" />
-      <NavTab label="Analytics" href="/analytics" />
+      <NavTab label="Home" href={Pages.SWAP} />
+      <NavTab label="Analytics" href={Pages.ANALYTICS} />
       <NavTabExternal label="About" href={aboutRedirectUrl} />
     </Tabs>
   );

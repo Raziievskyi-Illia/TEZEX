@@ -5,7 +5,7 @@ import Tab from "@mui/material/Tab";
 
 import { useSession } from "../../hooks/session";
 
-import { TransactingComponent } from "../../types/general";
+import { Pages, TransactingComponent } from "../../types/general";
 import style from "./style";
 import useStyles from "../../hooks/styles";
 
@@ -80,8 +80,8 @@ export const NavLiquidity: FC<INavLiquidty> = (props) => {
         ),
       }}
     >
-      <NavTab label="Add Liquidity" href="/home/add" />
-      <NavTab label="Remove Liquidity" href="/home/remove" />
+      <NavTab label="Add Liquidity" href={Pages.ADD_LIQUIDITY} />
+      <NavTab label="Remove Liquidity" href={Pages.REMOVE_LIQUIDITY} />
     </Tabs>
   );
 };

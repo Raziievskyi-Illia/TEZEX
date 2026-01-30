@@ -8,7 +8,7 @@ import { SessionProvider } from "./contexts/session";
 import ReactDOM from "react-dom/client";
 import { createHashRouter, RouterProvider, Navigate } from "react-router-dom";
 
-import { AppConfig } from "./types/general";
+import { AppConfig, Pages } from "./types/general";
 import appConfig from "./config/app.json";
 import { Home } from "./pages/Home";
 import { Analytics } from "./pages/Analytics";
@@ -20,22 +20,22 @@ const router = createHashRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="home/swap" replace />,
+        element: <Navigate to={Pages.SWAP} replace />,
       },
       {
-        path: "home/swap",
+        path: Pages.SWAP,
         element: <Home path="swap" />,
       },
       {
-        path: "home/add",
+        path: Pages.ADD_LIQUIDITY,
         element: <Home path="add" />,
       },
       {
-        path: "home/remove",
+        path: Pages.REMOVE_LIQUIDITY,
         element: <Home path="remove" />,
       },
       {
-        path: "analytics",
+        path: Pages.ANALYTICS,
         element: <Analytics />,
       },
     ],
