@@ -5,7 +5,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useSession } from "../../hooks/session";
 
-import { TransactingComponent } from "../../types/general";
+import { Pages, TransactingComponent } from "../../types/general";
 
 import style from "./style";
 import useStyles from "../../hooks/styles";
@@ -152,8 +152,9 @@ export const Menu: FC = () => {
 
   const liquidityHref: () => string = useCallback(() => {
     if (sessionInfo.activeComponent === TransactingComponent.REMOVE_LIQUIDITY) {
-      return "/home/remove";
-    } else return "/home/add";
+      return Pages.REMOVE_LIQUIDITY;
+    }
+    return Pages.ADD_LIQUIDITY;
   }, [sessionInfo]);
 
   return (
@@ -163,7 +164,7 @@ export const Menu: FC = () => {
       onChange={handleChange}
       aria-label="nav-home-tabs"
     >
-      <MenuItem label="Swap" href="/home/swap" />
+      <MenuItem label="Swap" href={Pages.SWAP} />
       <MenuItem label="Liquidity" href={liquidityHref()} />
     </Tabs>
   );
