@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 
@@ -7,6 +7,7 @@ import style from "./style";
 import useStyles from "../../hooks/styles";
 
 import { useSession } from "../../hooks/session";
+import { Pages } from "../../types/general";
 import Box from "@mui/material/Box";
 
 interface NavTabProps {
@@ -102,8 +103,7 @@ interface INavApp {
 export const NavApp: FC<INavApp> = (props) => {
   const styles = useStyles(style, props.scalingKey);
   const [value, setValue] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const location = useLocation();
   const pageId = {
     home: 0,
     analytics: 1,
@@ -113,12 +113,14 @@ export const NavApp: FC<INavApp> = (props) => {
   const aboutRedirectUrl = useSession().appConfig.aboutRedirectUrl;
 
   useEffect(() => {
-    if (loading) {
-      navigate("home/swap");
-      setValue(0);
-      setLoading(false);
+    if (location.pathname.startsWith(Pages.ANALYTICS)) {
+      setValue(pageId.analytics);
+      return;
     }
-  }, [loading, navigate]);
+    if (location.pathname.startsWith("/home")) {
+      setValue(pageId.home);
+    }
+  }, [location.pathname]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     event.preventDefault();
@@ -135,8 +137,8 @@ export const NavApp: FC<INavApp> = (props) => {
         style: { display: "none" },
       }}
     >
-      <NavTab label="Home" href="/home/swap" />
-      <NavTab disabled label="Analytics" href="/Analytics" />
+      <NavTab label="Home" href={Pages.SWAP} />
+      <NavTab label="Analytics" href={Pages.ANALYTICS} />
       <NavTabExternal label="About" href={aboutRedirectUrl} />
     </Tabs>
   );
