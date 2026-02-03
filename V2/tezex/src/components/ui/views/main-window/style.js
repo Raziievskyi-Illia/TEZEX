@@ -12,6 +12,12 @@ const style = (theme, scale = 1) => {
       justifyContent: "center",
       display: "flex",
     },
+    rootScrollable: {
+      justifyContent: "flex-start",
+      overflowY: "auto",
+      overflowX: "hidden",
+      paddingBottom: `calc(3.33vw * ${scale})`,
+    },
     sideLogo: {
       height: "70%",
       justifyContent: "center",
