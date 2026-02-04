@@ -1,10 +1,3 @@
-/**
- * Formatting utilities for Analytics page
- */
-
-/**
- * Format number as USD currency
- */
 export const formatUSD = (
   value: number,
   options?: { compact?: boolean; decimals?: number }
@@ -28,15 +21,38 @@ export const formatUSD = (
   }).format(value);
 };
 
-/**
- * Format XTZ amount
- */
-export const formatXTZ = (
+export interface TokenConfig {
+  symbol: string;
+  decimals: number;
+  compact?: boolean;
+  useIntlFormat?: boolean;
+}
+
+export const TOKEN_CONFIG: Record<string, TokenConfig> = {
+  XTZ: { symbol: "XTZ", decimals: 2, compact: true, useIntlFormat: true },
+  tzBTC: { symbol: "tzBTC", decimals: 6, compact: false, useIntlFormat: false },
+  SIRS: { symbol: "SIRS", decimals: 2, compact: false, useIntlFormat: true },
+};
+
+export const formatToken = (
   value: number,
+  token: keyof typeof TOKEN_CONFIG | string,
   options?: { compact?: boolean; decimals?: number; showSymbol?: boolean }
 ): string => {
-  const { compact = false, decimals = 2, showSymbol = true } = options || {};
-  const symbol = showSymbol ? " XTZ" : "";
+  const config = TOKEN_CONFIG[token] || {
+    symbol: token,
+    decimals: 2,
+    compact: false,
+    useIntlFormat: true,
+  };
+
+  const {
+    compact = config.compact ?? false,
+    decimals = config.decimals,
+    showSymbol = true,
+  } = options || {};
+
+  const symbol = showSymbol ? ` ${config.symbol}` : "";
 
   if (compact) {
     if (value >= 1_000_000) {
@@ -47,44 +63,16 @@ export const formatXTZ = (
     }
   }
 
-  return `${new Intl.NumberFormat("en-US", {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
-  }).format(value)}${symbol}`;
-};
-
-/**
- * Format tzBTC amount
- */
-export const formatTzBTC = (
-  value: number,
-  options?: { decimals?: number; showSymbol?: boolean }
-): string => {
-  const { decimals = 6, showSymbol = true } = options || {};
-  const symbol = showSymbol ? " tzBTC" : "";
+  if (config.useIntlFormat) {
+    return `${new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }).format(value)}${symbol}`;
+  }
 
   return `${value.toFixed(decimals)}${symbol}`;
 };
 
-/**
- * Format SIRS amount
- */
-export const formatSIRS = (
-  value: number,
-  options?: { decimals?: number; showSymbol?: boolean }
-): string => {
-  const { decimals = 2, showSymbol = true } = options || {};
-  const symbol = showSymbol ? " SIRS" : "";
-
-  return `${new Intl.NumberFormat("en-US", {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
-  }).format(value)}${symbol}`;
-};
-
-/**
- * Format percentage
- */
 export const formatPercent = (
   value: number,
   options?: { decimals?: number; showSign?: boolean }
@@ -95,9 +83,6 @@ export const formatPercent = (
   return `${sign}${value.toFixed(decimals)}%`;
 };
 
-/**
- * Format basis points (bps)
- */
 export const formatBps = (
   value: number,
   options?: { showSign?: boolean }
@@ -108,16 +93,10 @@ export const formatBps = (
   return `${sign}${value.toFixed(1)} bps`;
 };
 
-/**
- * Format price (high precision)
- */
 export const formatPrice = (value: number, decimals = 10): string => {
   return value.toFixed(decimals);
 };
 
-/**
- * Format timestamp to date string
- */
 export const formatDate = (
   timestamp: number,
   options?: { format?: "short" | "long" | "time" | "datetime" }
@@ -155,9 +134,6 @@ export const formatDate = (
   }
 };
 
-/**
- * Format time ago (relative time)
- */
 export const formatTimeAgo = (timestamp: number): string => {
   const now = Date.now();
   const diff = now - timestamp;
@@ -173,17 +149,11 @@ export const formatTimeAgo = (timestamp: number): string => {
   return "just now";
 };
 
-/**
- * Format transaction hash (truncated)
- */
 export const formatTxHash = (hash: string, chars = 8): string => {
   if (hash.length <= chars * 2) return hash;
   return `${hash.slice(0, chars)}...`;
 };
 
-/**
- * Format large number with K/M/B suffix
- */
 export const formatCompactNumber = (value: number): string => {
   if (value >= 1_000_000_000) {
     return `${(value / 1_000_000_000).toFixed(2)}B`;
@@ -197,9 +167,6 @@ export const formatCompactNumber = (value: number): string => {
   return value.toFixed(2);
 };
 
-/**
- * Determine change direction for styling
- */
 export const getChangeDirection = (
   value: number
 ): "positive" | "negative" | "neutral" => {
@@ -208,9 +175,6 @@ export const getChangeDirection = (
   return "neutral";
 };
 
-/**
- * Format change value with color indicator
- */
 export const formatChange = (
   value: number,
   options?: { type?: "percent" | "value"; decimals?: number }

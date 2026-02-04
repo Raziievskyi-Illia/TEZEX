@@ -1,9 +1,4 @@
-/**
- * TimeRangeTabs Component
- * Reusable time range selector: 24h | 7d | 30d | YTD | All | Custom
- */
-
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
@@ -40,32 +35,46 @@ export const TimeRangeTabs: FC<TimeRangeTabsProps> = ({
 }) => {
   const currentIndex = options.indexOf(value.option);
 
-  const handleTabChange = (_: React.SyntheticEvent, newIndex: number) => {
-    const newOption = options[newIndex];
-    onChange({
-      option: newOption,
-      startDate: newOption === "Custom" ? value.startDate : undefined,
-      endDate: newOption === "Custom" ? value.endDate : undefined,
-    });
-  };
+  const handleTabChange = useCallback(
+    (_: React.SyntheticEvent, newIndex: number) => {
+      const newOption = options[newIndex];
+      onChange({
+        option: newOption,
+        startDate: newOption === "Custom" ? value.startDate : undefined,
+        endDate: newOption === "Custom" ? value.endDate : undefined,
+      });
+    },
+    [options, onChange, value.startDate, value.endDate]
+  );
 
-  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange({
-      ...value,
-      startDate: e.target.value ? new Date(e.target.value) : undefined,
-    });
-  };
+  const handleStartDateChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChange({
+        ...value,
+        startDate: e.target.value ? new Date(e.target.value) : undefined,
+      });
+    },
+    [onChange, value]
+  );
 
-  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange({
-      ...value,
-      endDate: e.target.value ? new Date(e.target.value) : undefined,
-    });
-  };
+  const handleEndDateChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChange({
+        ...value,
+        endDate: e.target.value ? new Date(e.target.value) : undefined,
+      });
+    },
+    [onChange, value]
+  );
 
   const formatDateForInput = (date?: Date): string => {
     if (!date) return "";
-    return date.toISOString().slice(0, 16);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
 
   return (
