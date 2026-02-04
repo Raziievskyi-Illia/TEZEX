@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { Box } from "@mui/system";
+import { useLocation } from "react-router-dom";
 
 import style from "./style";
 import useStyles from "../../../../hooks/styles";
@@ -16,12 +17,15 @@ export interface IMainWindow {
 
 export const MainWindow: FC<IMainWindow> = (props) => {
   const styles = useStyles(style);
+  const location = useLocation();
+  const isAnalytics = location.pathname.startsWith("/analytics");
   return (
-    <Box sx={styles.root}>
-      <Box sx={styles.sideLogo}>
-        {" "}
-        <img src={sidelogo} />{" "}
-      </Box>
+    <Box sx={[styles.root, isAnalytics && styles.rootScrollable]}>
+      {!isAnalytics && (
+        <Box sx={styles.sideLogo}>
+          <img src={sidelogo} alt="Tezex" />
+        </Box>
+      )}
       {props.children}
     </Box>
   );
